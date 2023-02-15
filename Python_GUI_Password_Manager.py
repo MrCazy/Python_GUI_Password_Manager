@@ -354,16 +354,21 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
     def update_master_password(self):
         current_password = self.current_password_entry.get()
         with open("master_password.txt", "r") as file:
-            secret = file.readline()
-        master_password = self.decrypt("secret_key", secret)
+            secret = file.readlines()
+        question_answer = secret[1]
+        old_password = secret[0]
+        master_password = self.decrypt("secret_key", old_password)
         master_password = master_password.strip()  # Remove trailing newline character
         if current_password == master_password:
             new_password = self.new_password_entry.get()
             confirm_password = self.confirm_password_entry.get()
             if confirm_password != new_password:
                 return
+            write_new = self.encrypt("secret_key", new_password)
+            print(write_new)
             with open("master_password.txt", "w") as file:
-                file.write(self.encrypt("secret_key", new_password))
+                file.write(write_new + "\n" + question_answer)
+            file.close()
             self.destroy()
         else:
             # Display error
@@ -437,6 +442,7 @@ class Forgotpassword(customtkinter.CTk):
             encrypted_password = self.encrypt("secret_key", new_password)
             with open("master_password.txt", "w") as file:
                 file.write(encrypted_password + "\n" + secret[1])
+            file.close()
             self.destroy()
             app = App()
             app.mainloop()
