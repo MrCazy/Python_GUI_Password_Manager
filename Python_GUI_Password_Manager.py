@@ -12,7 +12,7 @@ class Loginpage(customtkinter.CTk):
         super().__init__()
 
         # configure window
-        self.title("Update Master Password")
+        self.title("Login")
         self.geometry(f"{320}x{360}")
         self.resizable(0, 0)
 
