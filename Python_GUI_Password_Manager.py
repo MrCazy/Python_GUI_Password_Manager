@@ -3,7 +3,6 @@ import tkinter.messagebox
 import customtkinter
 import base64
 import os
-import time
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -365,10 +364,7 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
                 return
             with open("master_password.txt", "w") as file:
                 file.write(self.encrypt("secret_key", new_password))
-            time.sleep(1)
             self.destroy()
-            app = App()
-            app.mainloop()
         else:
             # Display error
             ()
