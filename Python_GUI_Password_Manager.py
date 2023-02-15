@@ -59,7 +59,7 @@ class Loginpage(customtkinter.CTk):
     def forgot_password(self, event):
         # This method will be called when the "Forgot password?" label is clicked
         self.destroy()
-        app = forgotpassword(self)
+        app = Forgotpassword(self)
         app.mainloop()
     
     def decrypt(self, key, encrypt):
@@ -386,7 +386,7 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
             decrypt.append(dec_c)
         return "".join(decrypt)
 
-class forgotpassword(customtkinter.CTk):
+class Forgotpassword(customtkinter.CTk):
     def __init__(self, app):
         super().__init__()
 
