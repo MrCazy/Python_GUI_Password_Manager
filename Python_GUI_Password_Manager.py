@@ -21,8 +21,8 @@ class Loginpage(customtkinter.CTk):
         self.grid_columnconfigure((0, 2), weight=0)
         self.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
-        self.current_password_label = customtkinter.CTkLabel(self, text="Log in",font=('Century Gothic',20), anchor="w")
-        self.current_password_label.grid(row=0, column=1, padx=20, pady=(20, 10))
+        self.login_label = customtkinter.CTkLabel(self, text="Log in",font=('Century Gothic',20), anchor="w")
+        self.login_label.grid(row=0, column=1, padx=20, pady=(20, 10))
 
         self.current_password_entry = customtkinter.CTkEntry(self, placeholder_text="Enter password", show="*")
         self.current_password_entry.grid(row=1, column=1, padx=20, pady=(0, 5))
