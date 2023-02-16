@@ -32,7 +32,7 @@ class Loginpage(customtkinter.CTk):
         self.forgot_password_label.bind("<Button-1>", self.forgot_password)
 
         def on_enter(event):
-            self.forgot_password_label.configure(text_color="blue")
+            self.forgot_password_label.configure(text_color="#1f538d")
 
         def on_leave(event):
             self.forgot_password_label.configure(text_color="white")
@@ -60,7 +60,7 @@ class Loginpage(customtkinter.CTk):
             self.forgot_password_label.bind("<Button-1>", self.forgot_password)
             
             def on_enter(event):
-                self.forgot_password_label.configure(text_color="blue")
+                self.forgot_password_label.configure(text_color="#1f538d")
 
             def on_leave(event):
                 self.forgot_password_label.configure(text_color="white")
@@ -390,7 +390,8 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
         master_password = self.decrypt("secret_key", old_password)
         master_password = master_password.strip()  # Remove trailing newline character
         if current_password == master_password:
-            self.incorrect_error_label.destroy()
+            if hasattr(self, 'incorrect_error_label') and self.incorrect_error_label is not None:
+                self.incorrect_error_label.destroy()
             new_password = self.new_password_entry.get()
             confirm_password = self.confirm_password_entry.get()
             if confirm_password != new_password:
@@ -475,10 +476,13 @@ class Forgotpassword(customtkinter.CTk):
         encrypted_food = self.decrypt("secret_key", secret[1])
         encrypted_food = encrypted_food.strip()  # Remove trailing newline character
         if encrypted_food == favourite_food:
-            self.incorrect_error_label.destroy()
+            if hasattr(self, 'incorrect_error_label') and self.incorrect_error_label is not None:
+                self.incorrect_error_label.destroy()
             new_password = self.new_password_entry.get()
             confirm_password = self.confirm_password_entry.get()
             if confirm_password != new_password:
+                if hasattr(self, 'incorrect_error_label') and self.incorrect_error_label is not None:
+                    self.incorrect_error_label.destroy()
                 self.Update_button.destroy()
                 self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
                 self.Update_button.grid(row=8, column=1, padx=20, pady=(15, 20))
