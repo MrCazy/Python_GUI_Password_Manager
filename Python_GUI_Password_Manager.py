@@ -60,7 +60,7 @@ class Loginpage(customtkinter.CTk):
             self.forgot_password_label.bind("<Button-1>", self.forgot_password)
             self.error_label = customtkinter.CTkLabel(self, text="", text_color='red')
             self.error_label.grid(row=2, column=1, pady=(10, 0))
-            self.error_label.configure(text="Passwords do not match")
+            self.error_label.configure(text="Incorrect password")
             return
         
     def forgot_password(self, event):
