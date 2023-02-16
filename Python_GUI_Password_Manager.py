@@ -58,6 +58,15 @@ class Loginpage(customtkinter.CTk):
             self.forgot_password_label = customtkinter.CTkLabel(self, text="Forgot password?", anchor="w", text_color="white", cursor="hand2")
             self.forgot_password_label.grid(row=3, column=1, padx=20, pady=(0, 40))
             self.forgot_password_label.bind("<Button-1>", self.forgot_password)
+            
+            def on_enter(event):
+                self.forgot_password_label.configure(text_color="blue")
+
+            def on_leave(event):
+                self.forgot_password_label.configure(text_color="white")
+
+            self.forgot_password_label.bind("<Enter>", on_enter)
+            self.forgot_password_label.bind("<Leave>", on_leave)
             self.error_label = customtkinter.CTkLabel(self, text="", text_color='red')
             self.error_label.grid(row=2, column=1, pady=(10, 0))
             self.error_label.configure(text="Incorrect password")
