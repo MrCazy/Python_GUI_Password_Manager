@@ -54,7 +54,14 @@ class Loginpage(customtkinter.CTk):
             app = App()
             app.mainloop()
         else:
-            ()
+            self.forgot_password_label.destroy()
+            self.forgot_password_label = customtkinter.CTkLabel(self, text="Forgot password?", anchor="w", text_color="white", cursor="hand2")
+            self.forgot_password_label.grid(row=3, column=1, padx=20, pady=(0, 40))
+            self.forgot_password_label.bind("<Button-1>", self.forgot_password)
+            self.error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.error_label.grid(row=2, column=1, pady=(10, 0))
+            self.error_label.configure(text="Passwords do not match")
+            return
         
     def forgot_password(self, event):
         # This method will be called when the "Forgot password?" label is clicked
@@ -273,11 +280,8 @@ class CreateMasterPassword(customtkinter.CTk):
         self.confirm_password_entry = customtkinter.CTkEntry(self, placeholder_text="Re-enter password", show="*")
         self.confirm_password_entry.grid(row=3, column=1, padx=20, pady=(0, 0))
 
-        self.error_label = customtkinter.CTkLabel(self, text="", text_color='red')
-        self.error_label.grid(row=4, column=1, pady=(0, 30))
-
         self.favorite_food_label = customtkinter.CTkLabel(self, text="What is your favourite food?", anchor="w")
-        self.favorite_food_label.grid(row=4, column=1, padx=20, pady=(60, 5))
+        self.favorite_food_label.grid(row=4, column=1, padx=20, pady=(10, 5))
 
         self.favorite_food_entry = customtkinter.CTkEntry(self, placeholder_text="Answer", show="*")
         self.favorite_food_entry.grid(row=5, column=1, padx=20, pady=(0, 10))
@@ -291,9 +295,26 @@ class CreateMasterPassword(customtkinter.CTk):
         favourite_food = self.favorite_food_entry.get()
 
         if len(master_password) < 8:
+            self.favorite_food_entry.destroy()
+            self.favorite_food_label.destroy()
+
+            self.favorite_food_label = customtkinter.CTkLabel(self, text="What is your favourite food?", anchor="w")
+            self.favorite_food_label.grid(row=4, column=1, padx=20, pady=(60, 5))
+
+            self.favorite_food_entry = customtkinter.CTkEntry(self, placeholder_text="Answer", show="*")
+            self.favorite_food_entry.grid(row=5, column=1, padx=20, pady=(0, 10))
+
+            self.error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.error_label.grid(row=4, column=1, pady=(0, 30))
             self.error_label.configure(text="Password must be at least 8 characters long")
             return
         elif master_password != confirm_password:
+            self.error_label.destroy()
+            
+            self.favorite_food_label.grid(row=4, column=1, padx=20, pady=(60, 5))
+
+            self.error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.error_label.grid(row=4, column=1, pady=(0, 30))
             self.error_label.configure(text="Passwords do not match")
             return
 
@@ -322,31 +343,31 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
 
         # configure window
         self.title("Update Master Password")
-        self.geometry(f"{400}x{380}")
+        self.geometry(f"{450}x{430}")
         self.resizable(0, 0)
 
         # configure grid layout (4x3)
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((0, 2), weight=0)
-        self.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7), weight=1)
+        self.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8), weight=1)
 
         self.current_password_label = customtkinter.CTkLabel(self, text="Enter current password", anchor="w")
-        self.current_password_label.grid(row=0, column=1, padx=20, pady=(20, 10))
+        self.current_password_label.grid(row=0, column=1, padx=20, pady=(20, 0))
 
         self.current_password_entry = customtkinter.CTkEntry(self, placeholder_text="Current password", show="*")
-        self.current_password_entry.grid(row=1, column=1, padx=20, pady=(0, 20))
+        self.current_password_entry.grid(row=1, column=1, padx=20, pady=(0, 0))
 
         self.new_password_label = customtkinter.CTkLabel(self, text="Create new master password", anchor="w")
-        self.new_password_label.grid(row=3, column=1, padx=20, pady=(5, 10))
+        self.new_password_label.grid(row=3, column=1, padx=20, pady=(0, 0))
 
         self.new_password_entry = customtkinter.CTkEntry(self, placeholder_text="New password", show="*")
-        self.new_password_entry.grid(row=4, column=1, padx=20, pady=(0, 20))
+        self.new_password_entry.grid(row=4, column=1, padx=20, pady=(0, 0))
 
         self.confirm_password_label = customtkinter.CTkLabel(self, text="Confirm password", anchor="w")
-        self.confirm_password_label.grid(row=5, column=1, padx=20, pady=(5, 10))
+        self.confirm_password_label.grid(row=5, column=1, padx=20, pady=(0, 0))
 
         self.confirm_password_entry = customtkinter.CTkEntry(self, placeholder_text="Re-enter password", show="*")
-        self.confirm_password_entry.grid(row=6, column=1, padx=20, pady=(0, 20))
+        self.confirm_password_entry.grid(row=6, column=1, padx=20, pady=(0, 0))
 
         self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
         self.Update_button.grid(row=7, column=1, padx=20, pady=(15, 20))
@@ -360,9 +381,16 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
         master_password = self.decrypt("secret_key", old_password)
         master_password = master_password.strip()  # Remove trailing newline character
         if current_password == master_password:
+            self.incorrect_error_label.destroy()
             new_password = self.new_password_entry.get()
             confirm_password = self.confirm_password_entry.get()
             if confirm_password != new_password:
+                self.Update_button.destroy()
+                self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
+                self.Update_button.grid(row=8, column=1, padx=20, pady=(15, 20))
+                self.match_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+                self.match_error_label.grid(row=7, column=1, pady=(0, 0))
+                self.match_error_label.configure(text="Passwords do not match")
                 return
             write_new = self.encrypt("secret_key", new_password)
             print(write_new)
@@ -372,7 +400,10 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
             self.destroy()
         else:
             # Display error
-            ()
+            self.incorrect_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.incorrect_error_label.grid(row=2, column=1, pady=(0, 0))
+            self.incorrect_error_label.configure(text="Incorrect password")
+            return
 
     def encrypt(self, key, clear):
         encrypt = []
@@ -399,13 +430,13 @@ class Forgotpassword(customtkinter.CTk):
 
         # configure window
         self.title("Update Master Password")
-        self.geometry(f"{400}x{380}")
+        self.geometry(f"{450}x{430}")
         self.resizable(0, 0)
 
         # configure grid layout (4x3)
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((0, 2), weight=0)
-        self.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7), weight=1)
+        self.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8), weight=1)
 
         self.favourite_food_label = customtkinter.CTkLabel(self, text="What is your favourite food?", anchor="w")
         self.favourite_food_label.grid(row=0, column=1, padx=20, pady=(20, 10))
@@ -435,9 +466,16 @@ class Forgotpassword(customtkinter.CTk):
         encrypted_food = self.decrypt("secret_key", secret[1])
         encrypted_food = encrypted_food.strip()  # Remove trailing newline character
         if encrypted_food == favourite_food:
+            self.incorrect_error_label.destroy()
             new_password = self.new_password_entry.get()
             confirm_password = self.confirm_password_entry.get()
             if confirm_password != new_password:
+                self.Update_button.destroy()
+                self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
+                self.Update_button.grid(row=8, column=1, padx=20, pady=(15, 20))
+                self.match_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+                self.match_error_label.grid(row=7, column=1, pady=(0, 0))
+                self.match_error_label.configure(text="Passwords do not match")
                 return
             encrypted_password = self.encrypt("secret_key", new_password)
             with open("master_password.txt", "w") as file:
@@ -448,7 +486,10 @@ class Forgotpassword(customtkinter.CTk):
             app.mainloop()
         else:
             # Display error
-            ()
+            self.incorrect_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.incorrect_error_label.grid(row=2, column=1, pady=(0, 0))
+            self.incorrect_error_label.configure(text="Incorrect answer")
+            return
 
     def encrypt(self, key, clear):
         encrypt = []
