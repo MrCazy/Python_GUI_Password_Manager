@@ -392,28 +392,29 @@ class UpdateMasterPasswordWindow(customtkinter.CTk):
         if current_password == master_password:
             if hasattr(self, 'incorrect_error_label') and self.incorrect_error_label is not None:
                 self.incorrect_error_label.destroy()
-            new_password = self.new_password_entry.get()
-            confirm_password = self.confirm_password_entry.get()
-            if confirm_password != new_password:
-                self.Update_button.destroy()
-                self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
-                self.Update_button.grid(row=8, column=1, padx=20, pady=(15, 20))
-                self.match_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
-                self.match_error_label.grid(row=7, column=1, pady=(0, 0))
-                self.match_error_label.configure(text="Passwords do not match")
-                return
-            write_new = self.encrypt("secret_key", new_password)
-            print(write_new)
-            with open("master_password.txt", "w") as file:
-                file.write(write_new + "\n" + question_answer)
-            file.close()
-            self.destroy()
         else:
             # Display error
             self.incorrect_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
             self.incorrect_error_label.grid(row=2, column=1, pady=(0, 0))
             self.incorrect_error_label.configure(text="Incorrect password")
             return
+        new_password = self.new_password_entry.get()
+        confirm_password = self.confirm_password_entry.get()
+        if confirm_password != new_password:
+            self.Update_button.destroy()
+            self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
+            self.Update_button.grid(row=8, column=1, padx=20, pady=(15, 20))
+            self.match_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.match_error_label.grid(row=7, column=1, pady=(0, 0))
+            self.match_error_label.configure(text="Passwords do not match")
+            return
+        else:
+            write_new = self.encrypt("secret_key", new_password)
+            print(write_new)
+            with open("master_password.txt", "w") as file:
+                file.write(write_new + "\n" + question_answer)
+            file.close()
+            self.destroy()
 
     def encrypt(self, key, clear):
         encrypt = []
@@ -470,26 +471,31 @@ class Forgotpassword(customtkinter.CTk):
         self.Update_button.grid(row=7, column=1, padx=20, pady=(15, 20))
         
     def update_master_password(self):
-        favourite_food = self.favourite_food_entry.get()
         with open("master_password.txt", "r") as file:
             secret = file.readlines()
         encrypted_food = self.decrypt("secret_key", secret[1])
         encrypted_food = encrypted_food.strip()  # Remove trailing newline character
+        favourite_food = self.favourite_food_entry.get()
         if encrypted_food == favourite_food:
             if hasattr(self, 'incorrect_error_label') and self.incorrect_error_label is not None:
                 self.incorrect_error_label.destroy()
-            new_password = self.new_password_entry.get()
-            confirm_password = self.confirm_password_entry.get()
-            if confirm_password != new_password:
-                if hasattr(self, 'incorrect_error_label') and self.incorrect_error_label is not None:
-                    self.incorrect_error_label.destroy()
-                self.Update_button.destroy()
-                self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
-                self.Update_button.grid(row=8, column=1, padx=20, pady=(15, 20))
-                self.match_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
-                self.match_error_label.grid(row=7, column=1, pady=(0, 0))
-                self.match_error_label.configure(text="Passwords do not match")
-                return
+        else:
+            # Display error
+            self.incorrect_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.incorrect_error_label.grid(row=2, column=1, pady=(0, 0))
+            self.incorrect_error_label.configure(text="Incorrect answer")
+            return
+        new_password = self.new_password_entry.get()
+        confirm_password = self.confirm_password_entry.get()
+        if confirm_password != new_password:
+            self.Update_button.destroy()
+            self.Update_button = customtkinter.CTkButton(self, text="Update", command=self.update_master_password)
+            self.Update_button.grid(row=8, column=1, padx=20, pady=(15, 20))
+            self.match_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
+            self.match_error_label.grid(row=7, column=1, pady=(0, 0))
+            self.match_error_label.configure(text="Passwords do not match")
+            return
+        else:
             encrypted_password = self.encrypt("secret_key", new_password)
             with open("master_password.txt", "w") as file:
                 file.write(encrypted_password + "\n" + secret[1])
@@ -497,12 +503,6 @@ class Forgotpassword(customtkinter.CTk):
             self.destroy()
             app = App()
             app.mainloop()
-        else:
-            # Display error
-            self.incorrect_error_label = customtkinter.CTkLabel(self, text="", text_color='red')
-            self.incorrect_error_label.grid(row=2, column=1, pady=(0, 0))
-            self.incorrect_error_label.configure(text="Incorrect answer")
-            return
 
     def encrypt(self, key, clear):
         encrypt = []
